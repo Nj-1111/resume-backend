@@ -5,8 +5,19 @@ import os
 dynamodb = boto3.resource("dynamodb")
 TABLE_NAME = os.environ.get("TABLE_NAME", "VisitorCounter")
 
-
 def lambda_handler(event, context):
+
+    if event.get("httpMethod") == "OPTIONS":
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST,OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type",
+            },
+            "body": ""
+        }
+
     table = dynamodb.Table(TABLE_NAME)
 
     response = table.update_item(
@@ -22,9 +33,9 @@ def lambda_handler(event, context):
     return {
         "statusCode": 200,
         "headers": {
-            "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "POST,OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
         },
         "body": json.dumps({"count": count}),
     }
