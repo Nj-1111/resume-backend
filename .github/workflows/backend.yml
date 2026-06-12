@@ -44,7 +44,7 @@ jobs:
         run: |
           sam deploy \
             --stack-name resume-backend \
-            --s3-bucket ${{ secrets.SAM_DEPLOY_BUCKET }} \
+            --resolve-s3 \
             --capabilities CAPABILITY_IAM \
             --region ap-south-1 \
             --no-confirm-changeset \
